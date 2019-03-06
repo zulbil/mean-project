@@ -1,7 +1,7 @@
-const mongoose 	= require('mongoose'); 
-var config 		  = require('./config.json');
-var db         	= mongoose.connection;
-var env 	   	  = process.env.NODE_DEV || 'development'; 
+const mongoose 		= require('mongoose'); 
+var config 		  	= require('./config.json');
+var db         		= mongoose.connection;
+var env 	   	  	= process.env.NODE_DEV || 'development'; 
 
 if(env === 'development' || env === 'test') {
   var envConfig = config[env]; 

@@ -1,0 +1,12 @@
+{
+    "development": {
+        "PORT": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/mean-project",
+        "JWT_SECRET": "acvbetpmer78gs"
+    },
+    "test": {
+        "PORT": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/mean-projectTest",
+        "JWT_SECRET": "acvbetpmer87gs"
+    }
+}
