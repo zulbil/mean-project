@@ -8,11 +8,11 @@ This application requires installation of Node JS and Mongo DB prior to running.
 
 ## Installation
 
-	- git clone
+- git clone
 
-	- Go to your project directory with your command prompt and run `npm install` to install all your dependencies
+- Go to your project directory with your command prompt and run `npm install` to install all your dependencies
 
-	- Go into the angular-src folder and run `npm install`
+- Go into the angular-src folder and run `npm install`
 
 ## Quickstart
 
@@ -22,4 +22,4 @@ Go to your angular-src folder and run `ng serve`, and you will see on `htpp://lo
 
 ## Author
 
-	- Joel ALexandre Khang Zulbal [alexkhang25@yahoo.fr]
+- Joel Alexandre Khang Zulbal [joel.zulbal@satoripop.com]
