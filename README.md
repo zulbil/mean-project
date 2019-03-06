@@ -8,7 +8,7 @@ This application requires installation of Node JS and Mongo DB prior to running.
 
 ## Installation
 
-- git clone
+- git clone https://github.com/zulbil/mean-project.git
 
 - Go to your project directory with your command prompt and run `npm install` to install all your dependencies
 
