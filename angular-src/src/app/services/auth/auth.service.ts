@@ -18,7 +18,7 @@ const httpOptions = {
 export class AuthService {
 
   private baseApiEndpoint = 'http://localhost:3000';
-  authToken: string;
+  authToken;
   user;
 
   constructor( private http: HttpClient, private flashService: FlashMessagesService ) { }
@@ -46,6 +46,13 @@ export class AuthService {
 
     this.authToken = token;
     this.user = user;
+  }
+
+  /** Logout User */
+  logout () {
+    this.authToken = null;
+    this.user = null;
+    localStorage.clear();
   }
 
   /**
