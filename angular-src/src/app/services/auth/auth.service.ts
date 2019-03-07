@@ -18,6 +18,8 @@ const httpOptions = {
 export class AuthService {
 
   private baseApiEndpoint = 'http://localhost:3000';
+  authToken: string;
+  user;
 
   constructor( private http: HttpClient, private flashService: FlashMessagesService ) { }
 
@@ -27,6 +29,23 @@ export class AuthService {
                     .pipe(tap((newUser) => console.log(newUser)),
                     catchError(this.handleError<User>('Register User'))
     );
+  }
+
+  /** Log User */
+  logUser (user: any) {
+    return this.http.post(`${this.baseApiEndpoint}/login`, user, httpOptions)
+                    .pipe(tap((data) => console.log(data)),
+                    catchError(this.handleError<any>('Login User'))
+    );
+  }
+
+  /** Store User data on client */
+  storeUserData (token, user) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    this.authToken = token;
+    this.user = user;
   }
 
   /**
@@ -42,7 +61,7 @@ export class AuthService {
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      this.flashService.show(`${operation} failed: ${error.message}`, { cssClass: 'alert-danger', timeout: 2000 });
+      this.flashService.show(`${operation} failed: ${error.message}`, { cssClass: 'alert-danger', timeout: 5000 });
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
