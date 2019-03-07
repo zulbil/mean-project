@@ -11,13 +11,13 @@ import { AuthService } from './../services/auth/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  router: Router;
+
   loginForm: FormGroup;
   email: string;
   password: string;
   isValid = true;
 
-  constructor( private authService: AuthService, private flashMessage: FlashMessagesService ) { }
+  constructor( private authService: AuthService, private flashMessage: FlashMessagesService, private router: Router ) { }
 
   ngOnInit() {
     this.formControlInit();
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         if ( result.success ) {
           this.authService.storeUserData(result.token, result.data);
           this.flashMessage.show('Login Success', {cssClass: 'alert-success', timeout: 4000 });
-          this.router.navigate(['feed']);
+          this.router.navigate(['/feed']);
         }
       });
 
