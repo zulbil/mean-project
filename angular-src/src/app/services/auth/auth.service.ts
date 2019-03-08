@@ -55,6 +55,11 @@ export class AuthService {
     localStorage.clear();
   }
 
+  /** Check if the user is authenticated */
+  isAuthenticated () {
+    return this.authToken != null;
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -74,4 +79,5 @@ export class AuthService {
       return of(result as T);
     };
   }
+
 }
