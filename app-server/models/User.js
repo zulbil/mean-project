@@ -50,6 +50,17 @@ UserSchema.methods.toJSON = function () {
     return _.pick(userObject, ['_id','firstname','lastname','username','email']); 
 }
 
+// Returning a message when a user try to use an existing email
+// UserSchema.path('email').validate( function (value) {
+//     this.model('User').countDocuments({email: value}, function (err, count) {
+//         if (err) {
+//             throw new Error(err);
+//         }
+//         /** If count is greater than zero ==> invalidate */
+//         return true;
+//     });
+// }, 'Email already exists'); 
+
 // We are not using arrow function because arrow function cannot bind this keyword
 UserSchema.methods.generateAuthToken = function () {
     var user    = this; 

@@ -10,7 +10,7 @@ var registerUser = function (req, res) {
     newUser.save().then((newUser, error) => {
         return newUser.generateAuthToken(); 
     }).then((token) => {
-        res.header('x-auth', token).send({'success': true, 'data': newUser, 'token': token });
+        res.status(200).send({'success': true, 'data': newUser, 'token': token });
     }).catch((error) => {
         res.status(400).send({'success': false, 'data': error });
     }) 
@@ -21,7 +21,7 @@ var loginUser = function (req, res) {
 
     User.findByCredentials(body.email, body.password).then((user)=> {
         return user.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send({'success': true, 'data':user, 'token': token });
+            res.status(200).send({'success': true, 'data':user, 'token': token });
         })
     }).catch((error) => {
         res.status(400).send({'success': false, 'data': error});
