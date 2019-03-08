@@ -15,6 +15,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ValidateService } from './services/validate/validate.service';
 import { FlashMessagesModule  } from 'angular2-flash-messages';
 import { AuthService } from './services/auth/auth.service';
+import { AuthGuardService } from './services/guard/authguard.service';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { AuthService } from './services/auth/auth.service';
   ],
   providers: [
     ValidateService,
-    AuthService
+    AuthService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })
