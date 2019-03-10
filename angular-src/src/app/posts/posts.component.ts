@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../models/post';
 import { PostService } from '../services/post/post.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-posts',
@@ -9,23 +10,13 @@ import { PostService } from '../services/post/post.service';
 })
 export class PostsComponent implements OnInit {
   posts : Post[];
-
-  myPost : Post =  {
-    id: 1,
-    published_at: Date(),
-    title: "My firtst post",
-    likes: 150,
-    dislikes: 50,
-    comments: 10,
-    views: 25,
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce luctus vehicula tellus ac placerat",
-    media: "../../assets/images/claims.jpg"
-  };
-
+  postForm: FormGroup; 
+ 
   constructor( private postService: PostService ) { }
 
   ngOnInit() {
     this.getPostsList();
+    this.formControl();
   }
 
   getPostsList(): void {
@@ -44,4 +35,38 @@ export class PostsComponent implements OnInit {
     post.dislikes++;
   }
 
+  onMusicUpload (event) {
+    console.log(event); 
+  }
+
+  onImageUpload (event) {
+    console.log(event); 
+  }
+
+  onVideoUpload (event) {
+    console.log(event); 
+  }
+
+  onFileUpload (event) {
+    console.log(event); 
+  }
+
+  postStatus () {
+    if(this.postForm.valid) {
+      console.log('Valid form');
+      return true; 
+    } else {
+      console.log('Form is invalid'); 
+    }
+    this.postForm.reset();
+  }
+
+  formControl () {
+    this.postForm = new FormGroup({
+      'body': new FormControl(null, [
+        Validators.required,
+        Validators.minLength(8)
+      ])
+    });
+  }
 }

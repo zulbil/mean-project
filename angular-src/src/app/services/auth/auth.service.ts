@@ -57,7 +57,21 @@ export class AuthService {
 
   /** Check if the user is authenticated */
   isAuthenticated () {
-    return this.authToken != null;
+    return localStorage.getItem('token') != null;
+  }
+
+  /** Profile */
+  getUserProfile () {
+    var httpHeaders = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json', 
+        'x-auth': localStorage.getItem('token') 
+      })
+    }
+    return this.http.get(`${this.baseApiEndpoint}/profile`, httpHeaders)
+                    .pipe(tap((data) => console.log(data)),
+                    catchError(this.handleError<any>('User Profile'))
+    );
   }
 
   /**

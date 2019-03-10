@@ -8,32 +8,38 @@
         <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
       </figure>
       <div class="newpst-input">
-        <form method="post">
-          <textarea rows="2" placeholder="write something"></textarea>
+        <form method="post" [formGroup]="postForm" (ngSubmit)="postStatus()">
+          <textarea 
+            name="body" 
+            rows="2" 
+            placeholder="write something" 
+            formControlName="body"
+            required>
+          </textarea>
           <div class="attachments">
             <ul>
               <li>
                 <i class="fa fa-music"></i>
                 <label class="fileContainer">
-                  <input type="file">
+                  <input type="file" (change)="onMusicUpload($event)" name="music">
                 </label>
               </li>
               <li>
                 <i class="fa fa-image"></i>
                 <label class="fileContainer">
-                  <input type="file">
+                  <input type="file" (change)="onImageUpload($event)" name="image">
                 </label>
               </li>
               <li>
                 <i class="fa fa-video-camera"></i>
                 <label class="fileContainer">
-                  <input type="file">
+                  <input type="file" (change)="onVideoUpload($event)" name="video">
                 </label>
               </li>
               <li>
                 <i class="fa fa-camera"></i>
                 <label class="fileContainer">
-                  <input type="file">
+                  <input type="file" (change)="onFileUpload($event)" name="file">
                 </label>
               </li>
               <li>
@@ -120,9 +126,9 @@
                     </ul>
                   </div>
                   <div class="description">
-                    <p>
+                    <!-- <p>
                       {{myPost.body}}
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               </div>
