@@ -8,8 +8,8 @@ import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/feed', pathMatch: 'full' },
-  {path: 'signup', component: RegisterComponent },
-  {path: 'login', component: LoginComponent },
+  {path: 'signup', component: RegisterComponent, canActivate: [AuthGuardService]  },
+  {path: 'login', component: LoginComponent, canActivate: [AuthGuardService] },
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   {path: 'feed', component: PostsComponent, canActivate: [AuthGuardService] }
 ];
