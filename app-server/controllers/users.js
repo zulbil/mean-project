@@ -20,9 +20,7 @@ var loginUser = function (req, res) {
     var body    = _.pick(req.body, ['email', 'password']); 
 
     User.findByCredentials(body.email, body.password).then((user)=> {
-        return user.generateAuthToken().then((token) => {
-            res.status(200).send({'success': true, 'data':user, 'token': token });
-        })
+        res.status(200).send({'success': true, 'data':user, 'token': user.tokens[0].token });
     }).catch((error) => {
         res.status(400).send({'success': false, 'data': error});
     }) 
