@@ -32,8 +32,8 @@ export class AuthService {
   }
 
   /** Log User */
-  logUser (user: any) {
-    return this.http.post(`${this.baseApiEndpoint}/login`, user, httpOptions)
+  logUser (userData) {
+    return this.http.post(`${this.baseApiEndpoint}/login`, userData, httpOptions)
                     .pipe(tap((data) => console.log(data)),
                     catchError(this.handleError<any>('Login User'))
     );
