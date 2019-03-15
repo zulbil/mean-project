@@ -87,7 +87,7 @@ export class AuthService {
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      this.flashService.show(`${operation} failed: ${error.message}`, { cssClass: 'alert-danger', timeout: 5000 });
+      this.flashService.show(`${error.message}`, { cssClass: 'alert-danger', timeout: 5000 });
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
