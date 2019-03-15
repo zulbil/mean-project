@@ -1,9 +1,8 @@
-var {Post}          = require('./../models/Todo'); 
+var {Post}          = require('./../models/Post'); 
 var {ObjectID}      = require('mongodb');
 
 var postCreate = function(req, res) {
     var newPost = new Post({
-        title: req.body.title,
         content: req.body.content,
         created: new Date().getTime(),
         _creator: req.user._id
@@ -72,7 +71,7 @@ var postDelete = function(req, res ) {
         if(!post) {
             res.status(404).send('Post not found');
         } else {
-            res.status(200).send({todo});
+            res.status(200).send({post});
         }
     }, (err) => {
         res.status(400).send(err); 
@@ -82,7 +81,7 @@ var postDelete = function(req, res ) {
 var postUpdate = function(req, res) {
     var id = req.params.id; 
     //in our body we will take only title and content property
-    var body = _.pick(req.body, ['title', 'content']); 
+    var body = _.pick(req.body, ['content']); 
 
     if(!ObjectID.isValid(id)) {
         return res.status(404).send({'response': 'ID is invalid'}); 
@@ -94,11 +93,11 @@ var postUpdate = function(req, res) {
         "_id": id, 
         "_creator": req.user._id
     }; 
-    Todo.findOneAndUpdate(query, {$set: body}, {new: true}).then((todo) => {
-        if(!todo) {
-            return res.status(404).send('Todo not found');
+    Post.findOneAndUpdate(query, {$set: body}, {new: true}).then((post) => {
+        if(!post) {
+            return res.status(404).send('Post not found');
         }
-        res.status(200).send({todo}); 
+        res.status(200).send({post}); 
     }).catch((err) => {
         res.status(400).send(err);
     })
