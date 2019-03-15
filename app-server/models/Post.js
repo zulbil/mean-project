@@ -1,10 +1,5 @@
 const mongoose = require('mongoose'); 
 var PostSchema  = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        minlength: 1
-    },
     content: { 
         type: String,
         required: true,
@@ -19,6 +14,9 @@ var PostSchema  = new mongoose.Schema({
         type: String, 
         default: null
     },
+    likes : { type: Number, default: 0 },
+    dislikes : { type: Number, default: 0 },
+    media: { type: String, default: null },
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
         require: true
