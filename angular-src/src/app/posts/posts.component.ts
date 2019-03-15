@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from '../models/post';
+import { Post } from '../classes/post';
 import { PostService } from '../services/post/post.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -8,8 +8,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
+
 export class PostsComponent implements OnInit {
-  posts : Post[];
+  posts : Post[]|{posts: Post[]};
   postForm: FormGroup; 
  
   constructor( private postService: PostService ) { }
@@ -19,12 +20,11 @@ export class PostsComponent implements OnInit {
     this.formControl();
   }
 
-  getPostsList(): void {
-    this.postService
-        .getPosts()
-        .subscribe((data) => {
-          this.posts = data;
-        });
+  getPostsList() {
+    this.postService.getPosts().subscribe((data) => {
+      console.log(data);
+      this.posts = data; 
+    })
   }
 
   like(post: Post) {
@@ -54,16 +54,25 @@ export class PostsComponent implements OnInit {
   postStatus () {
     if(this.postForm.valid) {
       console.log('Valid form');
-      return true; 
+      const newPost = {
+        content: this.postForm.value.content
+      }
+      console.log(newPost); 
+      this.postService.createPost(newPost).subscribe((result)=> {
+        console.log(result);
+      }, (error) => {
+        console.log(error);
+      })
     } else {
       console.log('Form is invalid'); 
     }
+
     this.postForm.reset();
   }
 
   formControl () {
     this.postForm = new FormGroup({
-      'body': new FormControl(null, [
+      'content': new FormControl(null, [
         Validators.required,
         Validators.minLength(8)
       ])
