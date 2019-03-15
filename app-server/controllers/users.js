@@ -20,6 +20,9 @@ var loginUser = function (req, res) {
     var body    = _.pick(req.body, ['email', 'password']); 
 
     User.findByCredentials(body.email, body.password).then((user)=> {
+        if(!user) {
+            res.status(404).send({'success': false, 'message': 'We cannot find an account with that email address'}); 
+        }
         res.status(200).send({'success': true, 'data':user, 'token': user.tokens[0].token });
     }).catch((error) => {
         res.status(400).send({'success': false, 'data': error});
