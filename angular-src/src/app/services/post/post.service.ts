@@ -22,7 +22,7 @@ const httpHeaders = {
 })
 export class PostService {
   private baseApiEndpoint = 'http://localhost:3000';
-  posts: Post[]; 
+  postList: Post[]; 
   constructor( 
     private http: HttpClient, 
     private flashService : FlashMessagesService) {
@@ -31,14 +31,19 @@ export class PostService {
 
   getPosts() {
     return this.http.get<{posts: Post[]}>(`${this.baseApiEndpoint}/feed`, httpHeaders)
-                    .pipe(tap((feed) => this.posts = feed.posts ),
+                    .pipe(tap((feed) => this.postList = feed.posts ),
                     catchError(this.handleError<Post[]>('Fetching post'))
     );
   }
 
-  createPost(newPost) {
+  createPost(newPost: Post) {
+    this.postList.push(newPost); 
+
     return this.http.post(`${this.baseApiEndpoint}/new/post`,newPost, httpHeaders)
-                    .pipe(tap((newPost) => console.log(newPost)),
+                    .pipe(tap((newPost) => {
+                      if(newPost) 
+                        this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });
+                    }),
                     catchError(this.handleError<any>('Creating a new post'))
     );
   }

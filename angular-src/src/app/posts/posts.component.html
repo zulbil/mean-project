@@ -63,6 +63,9 @@
                   <span>published: {{ post.created | date:'medium' }}</span>
                 </div>
                 <div class="post-meta">
+                  <div class="description">
+                    {{ post.content }}
+                  </div>
                   <img *ngIf="post.media" src="{{ post.media }}" alt="Post image">
                   <div class="we-video-info">
                     <ul>
@@ -80,14 +83,14 @@
                       </li>
                     </ul>
                   </div>
-                  <div class="description">
-                    {{ post.content }}
-                  </div>
                 </div>
               </div>
             </div>
         </div>
       </div>
+    </div>
+    <div class="col-lg-4">
+        <flash-messages></flash-messages>
     </div>
   </div>
 </div>

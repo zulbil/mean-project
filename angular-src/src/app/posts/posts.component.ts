@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from '../classes/post';
 import { PostService } from '../services/post/post.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FlashMessagesService   } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-posts',
@@ -12,8 +13,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class PostsComponent implements OnInit {
   posts : Post[]|{posts: Post[]};
   postForm: FormGroup; 
- 
-  constructor( private postService: PostService ) { }
+  
+  constructor( 
+    private postService: PostService,
+    private flashMessage: FlashMessagesService ) { }
 
   ngOnInit() {
     this.getPostsList();
@@ -53,11 +56,17 @@ export class PostsComponent implements OnInit {
 
   postStatus () {
     if(this.postForm.valid) {
-      console.log('Valid form');
-      const newPost = {
-        content: this.postForm.value.content
+      const newPost: Post = {
+        _id: null,
+        created: ""+new Date().getTime(),
+        updatedAt: null, 
+        likes: 0,
+        dislikes: 0,
+        content: this.postForm.value.content,
+        media: null,
+        _creator: null
       }
-      console.log(newPost); 
+
       this.postService.createPost(newPost).subscribe((result)=> {
         console.log(result);
       }, (error) => {
