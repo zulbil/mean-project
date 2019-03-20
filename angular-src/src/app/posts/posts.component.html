@@ -17,6 +17,9 @@
             required>
           </textarea>
           <div class="attachments">
+            <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' ">
+              <img [src]="imagePreview" alt="postForm.value.content">
+            </div>
             <ul>
               <li>
                 <i class="fa fa-music"></i>
@@ -52,14 +55,14 @@
         </div>
       </div>
       <div class="load-more">
-        <div class="central-meta item" style="display: inline-block;" *ngFor="let post of posts.posts">
+        <div class="central-meta item" style="display: inline-block;" *ngFor="let post of posts">
             <div class="user-post">
               <div class="friend-info">
                 <figure>
                     <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
                 </figure>
                 <div class="friend-name">
-                  <ins><a href="time-line.html" title="">Janice Griffith</a></ins>
+                  <ins><a routerLink="/profile">{{ post._creator.username }}</a></ins>
                   <span>published: {{ post.created | date:'medium' }}</span>
                 </div>
                 <div class="post-meta">
