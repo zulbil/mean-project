@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../classes/post';
 import { PostService } from '../services/post/post.service';
+import { AuthService } from './../services/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FlashMessagesService   } from 'angular2-flash-messages';
+import { mimeType } from './mime-type-validator';
 
 @Component({
   selector: 'app-posts',
@@ -11,14 +13,18 @@ import { FlashMessagesService   } from 'angular2-flash-messages';
 })
 
 export class PostsComponent implements OnInit {
-  posts : Post[]|{posts: Post[]};
-  postForm: FormGroup; 
-  
-  constructor( 
+  posts : Post[];
+  postForm: FormGroup;
+  user;
+  imagePreview;
+
+  constructor(
     private postService: PostService,
-    private flashMessage: FlashMessagesService ) { }
+    private flashMessage: FlashMessagesService,
+    private auth: AuthService ) { }
 
   ngOnInit() {
+    this.user = this.auth.getUserConnected();
     this.getPostsList();
     this.formControl();
   }
@@ -26,7 +32,9 @@ export class PostsComponent implements OnInit {
   getPostsList() {
     this.postService.getPosts().subscribe((data) => {
       console.log(data);
-      this.posts = data; 
+      if ( data.posts != null) {
+        this.posts = data.posts;
+      }
     })
   }
 
@@ -39,32 +47,41 @@ export class PostsComponent implements OnInit {
   }
 
   onMusicUpload (event) {
-    console.log(event); 
+    console.log(event);
   }
 
-  onImageUpload (event) {
-    console.log(event); 
+  onImageUpload (event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.postForm.patchValue({ image: file });
+    this.postForm.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    }
+    reader.readAsDataURL(file);
   }
 
   onVideoUpload (event) {
-    console.log(event); 
+    console.log(event);
   }
 
   onFileUpload (event) {
-    console.log(event); 
+    console.log(event);
   }
 
   postStatus () {
     if(this.postForm.valid) {
-      const newPost: Post = {
+      const newPost = {
         _id: null,
         created: ""+new Date().getTime(),
-        updatedAt: null, 
+        updatedAt: null,
         likes: 0,
         dislikes: 0,
         content: this.postForm.value.content,
         media: null,
-        _creator: null
+        _creator: {
+          username: this.user.username
+        }
       }
 
       this.postService.createPost(newPost).subscribe((result)=> {
@@ -73,7 +90,7 @@ export class PostsComponent implements OnInit {
         console.log(error);
       })
     } else {
-      console.log('Form is invalid'); 
+      console.log('Form is invalid');
     }
 
     this.postForm.reset();
@@ -84,7 +101,11 @@ export class PostsComponent implements OnInit {
       'content': new FormControl(null, [
         Validators.required,
         Validators.minLength(8)
-      ])
+      ]),
+      'image': new FormControl(null, {
+        validators: [Validators.required ],
+        asyncValidators: [mimeType]
+      })
     });
   }
 }

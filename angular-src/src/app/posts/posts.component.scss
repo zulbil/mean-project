@@ -259,3 +259,8 @@ figure {
   background: none;
   border: 1px solid transparent;
 }
+.image-preview {
+  width: 450px;
+  height: auto;
+  img { max-width: 100%; }
+}

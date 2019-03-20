@@ -19,7 +19,7 @@ var PostSchema  = new mongoose.Schema({
     media: { type: String, default: null },
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
-        require: true
+        ref: 'User'
     }
 }); 
 

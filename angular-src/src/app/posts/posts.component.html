@@ -9,17 +9,17 @@
       </figure>
       <div class="newpst-input">
         <form method="post" [formGroup]="postForm" (ngSubmit)="postStatus()">
-          <textarea 
-            name="body" 
-            rows="2" 
-            placeholder="write something" 
+          <textarea
+            name="body"
+            rows="2"
+            placeholder="write something"
             formControlName="content"
             required>
           </textarea>
-          <div class="attachments">
-            <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' ">
+          <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' && postForm.get('image').value ">
               <img [src]="imagePreview" alt="postForm.value.content">
-            </div>
+          </div>
+          <div class="attachments">
             <ul>
               <li>
                 <i class="fa fa-music"></i>
