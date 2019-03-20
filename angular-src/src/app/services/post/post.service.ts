@@ -32,11 +32,11 @@ export class PostService {
   getPosts() {
     return this.http.get<{posts: Post[]}>(`${this.baseApiEndpoint}/feed`, httpHeaders)
                     .pipe(tap((feed) => this.postList = feed.posts ),
-                    catchError(this.handleError<Post[]>('Fetching post'))
+                    catchError(this.handleError<{posts: Post[]}>('Fetching post'))
     );
   }
 
-  createPost(newPost: Post) {
+  createPost(newPost) {
     this.postList.push(newPost); 
 
     return this.http.post(`${this.baseApiEndpoint}/new/post`,newPost, httpHeaders)

@@ -74,6 +74,9 @@ export class AuthService {
     );
   }
 
+  /** Get User */
+  getUserConnected() { return JSON.parse(localStorage.getItem('user')); }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
