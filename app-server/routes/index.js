@@ -5,6 +5,7 @@ var userCtrl        = require('./../controllers/users');
 var postCtrl        = require('./../controllers/posts'); 
 var {authenticate}  = require('./../middlewares/authenticate'); 
 
+
 //Users Routes 
 router.post('/signup', userCtrl.registerUser); 
 router.post('/login', userCtrl.loginUser); 

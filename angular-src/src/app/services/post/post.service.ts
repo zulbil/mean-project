@@ -36,10 +36,13 @@ export class PostService {
     );
   }
 
-  createPost(newPost) {
+  createPost(newPost, image: File) {
+    const postData = new FormData(); 
+    postData.append("content", newPost.content);
+    postData.append("image", image, newPost.content); 
     this.postList.push(newPost); 
 
-    return this.http.post(`${this.baseApiEndpoint}/new/post`,newPost, httpHeaders)
+    return this.http.post(`${this.baseApiEndpoint}/new/post`, postData, httpHeaders)
                     .pipe(tap((newPost) => {
                       if(newPost) 
                         this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });

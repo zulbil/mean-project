@@ -1,17 +1,28 @@
 var {Post}          = require('./../models/Post'); 
 var {ObjectID}      = require('mongodb');
+var {upload}        = require('./../middlewares/upload');
 
 var postCreate = function(req, res) {
-    var newPost = new Post({
-        content: req.body.content,
-        created: new Date().getTime(),
-        _creator: req.user._id
-    }); 
-    newPost.save().then((doc) => {
-        res.status(201).send(doc);
-    }, (error) => {
-        res.status(400).send(error);
-    })
+    upload (req, res, (err) => {
+        if (err) {
+            res.status(400).send(err); 
+        } else {
+            if (req.file == null ) {
+                res.status(400).send({'message': 'No file selected'});
+            } else {
+                var newPost = new Post({
+                    content: req.body.content,
+                    created: new Date().getTime(),
+                    _creator: req.user._id
+                }); 
+                newPost.save().then((doc) => {
+                    res.status(201).send(doc);
+                }, (error) => {
+                    res.status(400).send(error);
+                })
+            }
+        }
+    })  
 }
 
 var postListHistory = function(req, res ) {

@@ -84,7 +84,7 @@ export class PostsComponent implements OnInit {
         }
       }
 
-      this.postService.createPost(newPost).subscribe((result)=> {
+      this.postService.createPost(newPost, this.postForm.value.image).subscribe((result)=> {
         console.log(result);
       }, (error) => {
         console.log(error);
