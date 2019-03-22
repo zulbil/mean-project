@@ -13,7 +13,7 @@ import { mimeType } from './mime-type-validator';
 })
 
 export class PostsComponent implements OnInit {
-  posts : Post[];
+  posts: Post[];
   postForm: FormGroup;
   user;
   imagePreview;
@@ -35,7 +35,7 @@ export class PostsComponent implements OnInit {
       if ( data.posts != null) {
         this.posts = data.posts;
       }
-    })
+    });
   }
 
   like(post: Post) {
@@ -57,7 +57,7 @@ export class PostsComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result;
-    }
+    };
     reader.readAsDataURL(file);
   }
 
@@ -70,10 +70,10 @@ export class PostsComponent implements OnInit {
   }
 
   postStatus () {
-    if(this.postForm.valid) {
+    if ( this.postForm.valid ) {
       const newPost = {
         _id: null,
-        created: ""+new Date().getTime(),
+        created: '' + new Date().getTime(),
         updatedAt: null,
         likes: 0,
         dislikes: 0,
@@ -82,17 +82,15 @@ export class PostsComponent implements OnInit {
         _creator: {
           username: this.user.username
         }
-      }
-
-      this.postService.createPost(newPost, this.postForm.value.image).subscribe((result)=> {
+      };
+      this.postService.createPost(newPost, this.postForm.value.image).subscribe((result) => {
         console.log(result);
       }, (error) => {
         console.log(error);
-      })
+      });
     } else {
       console.log('Form is invalid');
     }
-
     this.postForm.reset();
   }
 

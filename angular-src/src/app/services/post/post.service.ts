@@ -12,19 +12,19 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 const httpHeaders = {
-  headers: new HttpHeaders({ 
-    'Content-Type': 'application/json', 
-    'x-auth': localStorage.getItem('token') 
+  headers: new HttpHeaders({
+    // 'Content-Type': 'application/json',
+    'x-auth': localStorage.getItem('token')
   })
-}
+};
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
   private baseApiEndpoint = 'http://localhost:3000';
-  postList: Post[]; 
-  constructor( 
-    private http: HttpClient, 
+  postList: Post[];
+  constructor(
+    private http: HttpClient,
     private flashService : FlashMessagesService) {
 
     }
@@ -36,16 +36,17 @@ export class PostService {
     );
   }
 
-  createPost(newPost, image: File) {
-    const postData = new FormData(); 
-    postData.append("content", newPost.content);
-    postData.append("image", image, newPost.content); 
-    this.postList.push(newPost); 
-
-    return this.http.post(`${this.baseApiEndpoint}/new/post`, postData, httpHeaders)
-                    .pipe(tap((newPost) => {
-                      if(newPost) 
+  createPost( newPost, image ) {
+    const formData = new FormData();
+    formData.append('content', newPost.content);
+    formData.append('image', image);
+    console.log(formData);
+    this.postList.push(newPost);
+    return this.http.post(`${this.baseApiEndpoint}/new/post`, formData, httpHeaders)
+                    .pipe(tap(( newPostdata ) => {
+                      if ( newPostdata ) {
                         this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });
+                      }
                     }),
                     catchError(this.handleError<any>('Creating a new post'))
     );

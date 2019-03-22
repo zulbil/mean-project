@@ -1,14 +1,14 @@
 <app-navbar></app-navbar>
 <div class="container main-content">
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-8">
       <div class="central-meta">
         <div class="new-postbox">
       <figure>
         <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
       </figure>
       <div class="newpst-input">
-        <form method="post" [formGroup]="postForm" (ngSubmit)="postStatus()">
+        <form method="post" [formGroup]="postForm" (ngSubmit)="postStatus()" enctype="multipart/form-data">
           <textarea
             name="body"
             rows="2"
@@ -58,12 +58,28 @@
         <div class="central-meta item" style="display: inline-block;" *ngFor="let post of posts">
             <div class="user-post">
               <div class="friend-info">
-                <figure>
-                    <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
-                </figure>
-                <div class="friend-name">
-                  <ins><a routerLink="/profile">{{ post._creator.username }}</a></ins>
-                  <span>published: {{ post.created | date:'medium' }}</span>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="row">
+                      <figure class="col-2 col-sm-2">
+                        <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
+                      </figure>
+                      <div class="friend-name col-8 col-sm-8">
+                        <a class="username" routerLink="/profile">{{ post._creator.username }}</a>
+                        <span>published: {{ post.created | date:'medium' }}</span>
+                      </div>
+                      <div class="more dropdown col-2 col-sm-2">
+                        <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          More
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="post-meta">
                   <div class="description">

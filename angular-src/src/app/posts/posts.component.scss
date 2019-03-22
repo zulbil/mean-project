@@ -108,12 +108,12 @@ figure .circle-img {
     position: relative;
     width: 100%;
 }
-.friend-info > figure {
-    display: inline-block;
-    margin-bottom: 0;
-    vertical-align: middle;
-    width: 8%;
-}
+// .friend-info > figure {
+//     display: inline-block;
+//     margin-bottom: 0;
+//     vertical-align: middle;
+//     width: 8%;
+// }
 figure {
     margin: 0 0 1rem;
 }
@@ -122,12 +122,16 @@ figure {
     margin-top: 10px;
     width: 100%;
 }
-.friend-name {
-    display: inline-block;
-    padding-left: 10px;
-    vertical-align: middle;
-    width: 75%;
-    margin-left: 5%;
+// .friend-name {
+//     display: inline-block;
+//     padding-left: 10px;
+//     vertical-align: middle;
+//     width: 75%;
+//     margin-left: 5%;
+// }
+.username {
+  font-weight: 700;
+  font-size: 1.3em;
 }
 .friend-name > span {
     color: #999;
