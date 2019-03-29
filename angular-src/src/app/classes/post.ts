@@ -6,5 +6,5 @@ export class Post {
     dislikes: number;
     content: string;
     media: string;
-    _creator: string;
-};
+    _creator: any;
+}

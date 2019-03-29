@@ -241,7 +241,7 @@ figure {
 .media-container {
   width: 100%;
   float: left;
-  img { height: 100%; width: 100%;}
+  img { height: auto; max-width: 100%;}
 }
 .menu .btn.trigger {
     opacity: 1;
@@ -271,4 +271,8 @@ figure {
   width: 450px;
   height: auto;
   img { max-width: 100%; }
+}
+
+.more {
+  cursor: pointer;
 }

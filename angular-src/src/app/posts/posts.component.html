@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="container main-content">
   <div class="row">
-    <div class="col-8">
+    <div class="col-12 col-md-8">
       <div class="central-meta">
         <div class="new-postbox">
       <figure>
@@ -61,21 +61,24 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="row">
-                      <figure class="col-2 col-sm-2">
+                      <figure class="col-12 col-sm-2">
                         <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
                       </figure>
-                      <div class="friend-name col-8 col-sm-8">
+                      <div class="friend-name col-12 col-sm-8">
                         <a class="username" routerLink="/profile">{{ post._creator.username }}</a>
                         <span>published: {{ post.created | date:'medium' }}</span>
                       </div>
-                      <div class="more dropdown col-2 col-sm-2">
+                      <div class="more dropdown col-12 col-sm-2">
                         <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           More
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
+                          <a class="dropdown-item" href="javascript:void(0);" (click)="editPost(post)">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                          </a>
+                          <a class="dropdown-item" href="javascript:void(0);" (click)="removePost(post)">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -109,7 +112,7 @@
             </div>
         </div>
       </div>
-      <div class="load-more no-posts" *ngIf="posts.length <= 0">
+      <div class="load-more no-posts" *ngIf="posts && posts.length <= 0">
         <h4>No posts Added!</h4>
       </div>
     </div>
