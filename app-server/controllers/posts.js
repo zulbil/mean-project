@@ -1,3 +1,4 @@
+const fs            = require('fs');
 var {Post}          = require('./../models/Post'); 
 var {ObjectID}      = require('mongodb');
 var {upload}        = require('./../middlewares/upload');
@@ -77,9 +78,14 @@ var postDelete = function(req, res ) {
         }
     ).then((post) => {
         if(!post) {
-            res.status(404).send('Post not found');
+            res.status(404).send({'response': 'Post not found'});
         } else {
-            res.status(200).send({post});
+            var fileName = post.media.split('/').pop();
+            fs.unlink(`./public/uploads/images/${fileName}`, (err) => {
+                if (err) throw err;
+                console.log('Successfully remove from /public/uploads/images');
+            })
+            res.status(204).send();
         }
     }, (err) => {
         res.status(400).send(err); 

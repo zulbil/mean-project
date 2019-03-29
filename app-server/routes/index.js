@@ -17,7 +17,7 @@ router.get('/profile', authenticate, userCtrl.userProfile);
 router.post('/new/post',authenticate,upload.single('image'), postCtrl.postCreate ); 
 router.get('/feed', authenticate, postCtrl.feedList ); 
 router.get('/post/:id', authenticate,postCtrl.postById); 
-router.delete('/post/remove', authenticate, postCtrl.postDelete ); 
+router.delete('/post/remove/:id', authenticate, postCtrl.postDelete ); 
 router.patch('/post/edit/:id', authenticate, postCtrl.postUpdate ); 
 
 
