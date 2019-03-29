@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Post } from '../../classes/post';
 
+import { AuthService } from './../auth/auth.service';
 import { FlashMessagesService   } from 'angular2-flash-messages';
 
 const httpOptions = {
@@ -26,35 +27,54 @@ const httpHeadersUpload = {
   providedIn: 'root'
 })
 export class PostService {
-  private baseApiEndpoint = 'http://localhost:3000';
-  postList: Post[];
-  constructor(
-    private http: HttpClient,
-    private flashService : FlashMessagesService) {
+  private baseApiEndpoint  	= 'http://localhost:3000';
+  private postList: Post[]  = [];
+  private postUpdated 		  = new Subject<Post[]>();
+  private user              = this.auth.getUserConnected();
 
-    }
+  constructor( private http: HttpClient, private flashService: FlashMessagesService, private auth: AuthService ) { }
 
   getPosts() {
     return this.http.get<{posts: Post[]}>(`${this.baseApiEndpoint}/feed`, httpHeaders)
-                    .pipe(tap((feed) => this.postList = feed.posts ),
-                    catchError(this.handleError<{posts: Post[]}>('Fetching post'))
+              .pipe(tap((feed) => {
+                this.postList = feed.posts;
+                this.postUpdated.next([...this.postList]);
+              }),
+              catchError(this.handleError<{posts: Post[]}>('Fetching post'))
     );
   }
 
-  createPost( newPost, image ) {
-    const formData = new FormData();
-    formData.append('content', newPost.content);
+	createPost( newPost, image ) {
+		const formData = new FormData();
+		formData.append('content', newPost.content);
     formData.append('image', image);
-    console.log(formData);
-    this.postList.push(newPost);
-    return this.http.post(`${this.baseApiEndpoint}/new/post`, formData, httpHeadersUpload)
-                    .pipe(tap(( newPostdata ) => {
-                      if ( newPostdata ) {
-                        this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });
-                      }
-                    }),
-                    catchError(this.handleError<any>('Creating a new post'))
-    );
+		return this.http.post<Post>(`${this.baseApiEndpoint}/new/post`, formData, httpHeadersUpload)
+            .pipe(tap(( newPostdata ) => {
+              if ( newPostdata ) {
+                const newPostFront = {
+                  ...newPostdata,
+                  _creator: { username: this.user.username }
+                };
+                this.postList.push( newPostFront );
+                this.postUpdated.next([...this.postList]);
+                this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });
+              }
+            }),
+            catchError(this.handleError<any>('Creating a new post'))
+		);
+  }
+
+  deletePost ( post: Post ) {
+    return this.http.delete(`${this.baseApiEndpoint}/post/remove/${post._id}`, httpHeaders)
+            .pipe(tap(() => {
+              this.flashService.show('Your post is deleted...', { cssClass: 'alert-success', timeout: 5000 });
+            }),
+            catchError(this.handleError<any>('Deleting a new post'))
+		);
+  }
+
+  getPostsUpdateListener () {
+    return this.postUpdated.asObservable();
   }
 
    /**

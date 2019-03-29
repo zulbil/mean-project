@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Post } from '../classes/post';
 import { PostService } from '../services/post/post.service';
 import { AuthService } from './../services/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FlashMessagesService   } from 'angular2-flash-messages';
 import { mimeType } from './mime-type-validator';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-posts',
@@ -12,11 +13,13 @@ import { mimeType } from './mime-type-validator';
   styleUrls: ['./posts.component.scss']
 })
 
-export class PostsComponent implements OnInit {
-  posts: Post[];
+export class PostsComponent implements OnInit, OnDestroy {
+  posts: Post[] = [];
+  postSub: Subscription;
   postForm: FormGroup;
   user;
   imagePreview;
+  mode = 'create';
 
   constructor(
     private postService: PostService,
@@ -27,6 +30,10 @@ export class PostsComponent implements OnInit {
     this.user = this.auth.getUserConnected();
     this.getPostsList();
     this.formControl();
+  }
+
+  ngOnDestroy() {
+    this.postSub.unsubscribe();
   }
 
   getPostsList() {
@@ -70,6 +77,7 @@ export class PostsComponent implements OnInit {
   }
 
   postStatus () {
+    console.log(this.user.username);
     if ( this.postForm.valid ) {
       const newPost = {
         _id: null,
@@ -83,11 +91,15 @@ export class PostsComponent implements OnInit {
           username: this.user.username
         }
       };
-      this.postService.createPost(newPost, this.postForm.value.image).subscribe((result) => {
-        console.log(result);
-      }, (error) => {
-        console.log(error);
-      });
+      if (this.mode === 'create') {
+        this.postService.createPost(newPost, this.postForm.value.image ).subscribe((result) => {
+          console.log(result);
+        }, (error) => {
+          console.log(error);
+        });
+      } else {
+        // Edit service
+      }
     } else {
       console.log('Form is invalid');
     }
@@ -105,5 +117,22 @@ export class PostsComponent implements OnInit {
         asyncValidators: [mimeType]
       })
     });
+  }
+
+  editPost( post: Post ) {
+    console.log(post);
+    this.postForm.setValue({
+      'content': post.content,
+      'image': post.media
+    });
+    this.imagePreview = post.media;
+    this.mode = 'edit';
+  }
+
+  removePost( post: Post) {
+    this.postService.deletePost(post).subscribe(() => {
+      const updatedPosts = this.posts.filter((singlePost) => post._id !== singlePost._id );
+      this.posts = updatedPosts;
+    }, (error) => console.log(error) )
   }
 }
