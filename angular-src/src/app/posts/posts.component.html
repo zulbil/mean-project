@@ -68,7 +68,7 @@
                         <a class="username" routerLink="/profile">{{ post._creator.username }}</a>
                         <span>published: {{ post.created | date:'medium' }}</span>
                       </div>
-                      <div class="more dropdown col-12 col-sm-2">
+                      <div class="more dropdown col-12 col-sm-2" *ngIf="user.username == post._creator.username">
                         <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           More
                         </a>

@@ -29,6 +29,7 @@ var UserSchema      = new mongoose.Schema({
         require: true,
         minlength: 6
     },
+    profilePicture: { type: String, default: null },
     tokens: [{
         access: {
             type: String, 

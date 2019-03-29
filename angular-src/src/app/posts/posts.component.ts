@@ -13,9 +13,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./posts.component.scss']
 })
 
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit {
   posts: Post[] = [];
-  postSub: Subscription;
   postForm: FormGroup;
   user;
   imagePreview;
@@ -28,12 +27,9 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.user = this.auth.getUserConnected();
+    console.log(this.user);
     this.getPostsList();
     this.formControl();
-  }
-
-  ngOnDestroy() {
-    this.postSub.unsubscribe();
   }
 
   getPostsList() {
