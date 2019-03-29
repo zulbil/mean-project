@@ -35,7 +35,7 @@ var postListHistory = function(req, res ) {
 }
 
 var feedList = function (req, res) {
-    Post.find().populate('_creator').then((posts) => {
+    Post.find().sort('created').populate('_creator').then((posts) => {
         if(!posts) return res.status(404).send({'response': 'Not found'}); 
         res.status(200).send({posts});
     }, (err) => {

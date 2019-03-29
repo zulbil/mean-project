@@ -7,8 +7,8 @@ var PostSchema  = new mongoose.Schema({
         minlength: 1 
     }, 
     created: { 
-        type: String,
-        default: null 
+        type: Date,
+        default: Date.now 
     },
     updatedAt: { 
         type: String, 
