@@ -21,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Body Parser Middleware
 app.use(bodyParser.json()); 
 
+app.use('/images', express.static(path.join(__dirname, 'public/uploads/images'))); 
+
 //Routes 
 app.use('/', routes);
 

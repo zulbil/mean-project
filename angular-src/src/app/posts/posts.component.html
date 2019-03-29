@@ -54,7 +54,7 @@
       </div>
         </div>
       </div>
-      <div class="load-more">
+      <div class="load-more" *ngIf="posts.length > 0">
         <div class="central-meta item" style="display: inline-block;" *ngFor="let post of posts">
             <div class="user-post">
               <div class="friend-info">
@@ -85,7 +85,9 @@
                   <div class="description">
                     {{ post.content }}
                   </div>
-                  <img *ngIf="post.media" src="{{ post.media }}" alt="Post image">
+                  <div class="media-container" *ngIf="post.media">
+                    <img src="{{ post.media }}" alt="Post image">
+                  </div>
                   <div class="we-video-info">
                     <ul>
                       <li>
@@ -106,6 +108,9 @@
               </div>
             </div>
         </div>
+      </div>
+      <div class="load-more no-posts" *ngIf="posts.length <= 0">
+        <h4>No posts Added!</h4>
       </div>
     </div>
     <div class="col-lg-4">

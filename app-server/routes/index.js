@@ -14,7 +14,7 @@ router.post('/login', userCtrl.loginUser);
 router.get('/profile', authenticate, userCtrl.userProfile); 
 
 // Posts Routes 
-router.post('/new/post', upload.single('image'), authenticate, postCtrl.postCreate ); 
+router.post('/new/post',authenticate,upload.single('image'), postCtrl.postCreate ); 
 router.get('/feed', authenticate, postCtrl.feedList ); 
 router.get('/post/:id', authenticate,postCtrl.postById); 
 router.delete('/post/remove', authenticate, postCtrl.postDelete ); 

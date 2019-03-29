@@ -3,10 +3,15 @@ var {ObjectID}      = require('mongodb');
 var {upload}        = require('./../middlewares/upload');
 
 var postCreate = function(req, res) {
-    
+    const url       = req.protocol+ '://'+req.get('host'); 
+    var imagePath = null;  
+    if ( req.file ) {
+        imagePath = url+'/images/'+req.file.filename; 
+    }
     var newPost = new Post({
         content: req.body.content,
         created: new Date().getTime(),
+        media  : imagePath, 
         _creator: req.user._id
     }); 
     newPost.save().then((doc) => {

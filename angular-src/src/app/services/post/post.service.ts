@@ -13,7 +13,12 @@ const httpOptions = {
 };
 const httpHeaders = {
   headers: new HttpHeaders({
-    // 'Content-Type': 'application/json',
+    'Content-Type': 'application/json',
+    'x-auth': localStorage.getItem('token')
+  })
+};
+const httpHeadersUpload = {
+  headers: new HttpHeaders({
     'x-auth': localStorage.getItem('token')
   })
 };
@@ -42,7 +47,7 @@ export class PostService {
     formData.append('image', image);
     console.log(formData);
     this.postList.push(newPost);
-    return this.http.post(`${this.baseApiEndpoint}/new/post`, formData, httpHeaders)
+    return this.http.post(`${this.baseApiEndpoint}/new/post`, formData, httpHeadersUpload)
                     .pipe(tap(( newPostdata ) => {
                       if ( newPostdata ) {
                         this.flashService.show('A new post was posted', { cssClass: 'alert-success', timeout: 5000 });
