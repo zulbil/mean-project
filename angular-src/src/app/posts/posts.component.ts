@@ -77,7 +77,7 @@ export class PostsComponent implements OnInit {
     if ( this.postForm.valid ) {
       const newPost = {
         _id: null,
-        created: '' + new Date().getTime(),
+        created: null,
         updatedAt: null,
         likes: 0,
         dislikes: 0,
@@ -95,6 +95,12 @@ export class PostsComponent implements OnInit {
         });
       } else {
         // Edit service
+        console.log(newPost);
+        // this.postService.editPost(newPost, this.postForm.value.image).subscribe((result) => {
+        //   console.log(result);
+        // }, (error) => {
+        //   console.log(error);
+        // })
       }
     } else {
       console.log('Form is invalid');

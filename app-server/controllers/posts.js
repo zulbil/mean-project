@@ -85,7 +85,7 @@ var postDelete = function(req, res ) {
                 if (err) throw err;
                 console.log('Successfully remove from /public/uploads/images');
             })
-            res.status(204).send();
+            res.status(204).send({'response': 'Post was successfully removed'});
         }
     }, (err) => {
         res.status(400).send(err); 
