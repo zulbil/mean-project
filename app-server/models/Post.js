@@ -15,6 +15,10 @@ var PostSchema  = new mongoose.Schema({
         default: null
     },
     likes : { type: Number, default: 0 },
+    likesObj: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Likes'
+    }],
     dislikes : { type: Number, default: 0 },
     media: { type: String, default: null },
     _creator: {

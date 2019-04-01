@@ -1,5 +1,6 @@
 const fs            = require('fs');
 var {Post}          = require('./../models/Post'); 
+var {Like}          = require('./../models/Like');
 var {ObjectID}      = require('mongodb');
 var {upload}        = require('./../middlewares/upload');
 
@@ -117,11 +118,40 @@ var postUpdate = function(req, res) {
     })
 }
 
+var likePost = function (req, res) {
+    var id = req.params.id; 
+
+    var newLike = new Like({
+        _creator : req.user._id
+    }); 
+
+    newLike.save( (err, like) => {
+        if (err) {
+            throw err; 
+        }
+        Post.findById(id, (err, post) => {
+            if (err) {
+                throw err;
+            } else {
+                post.likesObj.push(like); 
+                post.save((err, postUpdated) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        res.status(200).send({ postUpdated });
+                    }
+                })
+            }
+        })
+    }); 
+}
+
 module.exports = {
     postCreate,
     postListHistory,
     feedList,
     postById,
     postDelete,
-    postUpdate
+    postUpdate,
+    likePost
 }
