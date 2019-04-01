@@ -43,6 +43,11 @@ export class PostsComponent implements OnInit {
 
   like(post: Post) {
     post.likes++;
+    this.postService.likePost(post).subscribe((data) => {
+      console.log(data);
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   dislike (post: Post) {

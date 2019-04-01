@@ -77,6 +77,14 @@ export class PostService {
     return this.postUpdated.asObservable();
   }
 
+  likePost (post: Post) {
+    return this.http.post(`${this.baseApiEndpoint}/like/${post._id}`, httpHeaders)
+              .pipe(tap((like) => {
+                console.log(like);
+              }),
+              catchError(this.handleError<any>('Liking post'))
+    );
+  }
    /**
    * Handle Http operation that failed.
    * Let the app continue.
