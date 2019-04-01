@@ -1,11 +1,46 @@
 .logout { cursor: pointer; }
 .custom-navbar {
     box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
-    border-bottom: 1px solid #dee2e6 !important; 
+    border-bottom: 1px solid #dee2e6 !important;
     z-index: 99;
     background: #fff;
     .navbar-brand img {
         width: 40px;
         vertical-align: middle;
     }
+    .circle-img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      cursor: pointer;
+    }
+}
+.user-div { position: relative; }
+.user-panel {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  border: 1px solid #e1e8ed;
+  ul {
+    list-style: none;
+    padding: 0;
+    width: 150px;
+    margin-bottom: 0;
+    i {
+      color: #0a3d62;
+      margin-right: 5px;
+    }
+    li {
+      padding: 13px 10px;
+      cursor: pointer;
+      &:hover {
+        background: #e1e8ed;
+      }
+    }
+    a {
+      color: #555;
+      font-size: 14px;
+    }
+  }
 }

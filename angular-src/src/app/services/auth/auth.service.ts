@@ -62,10 +62,10 @@ export class AuthService {
 
   /** Profile */
   getUserProfile () {
-    var httpHeaders = {
-      headers: new HttpHeaders({ 
-        'Content-Type': 'application/json', 
-        'x-auth': localStorage.getItem('token') 
+    const httpHeaders = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-auth': localStorage.getItem('token')
       })
     }
     return this.http.get(`${this.baseApiEndpoint}/profile`, httpHeaders)
