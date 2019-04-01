@@ -30,11 +30,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onClickActive() {
-    if (this.display) {
-      this.display = false;
-    } else {
-      this.display = true;
-    }
+    this.display = ( this.display ) ? false : true ;
   }
 
 }
