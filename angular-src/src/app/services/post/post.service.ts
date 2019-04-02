@@ -9,20 +9,7 @@ import { Post } from '../../classes/post';
 import { AuthService } from './../auth/auth.service';
 import { FlashMessagesService   } from 'angular2-flash-messages';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-const httpHeaders = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'x-auth': localStorage.getItem('token')
-  })
-};
-const httpHeadersUpload = {
-  headers: new HttpHeaders({
-    'x-auth': localStorage.getItem('token')
-  })
-};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,7 +22,7 @@ export class PostService {
   constructor( private http: HttpClient, private flashService: FlashMessagesService, private auth: AuthService ) { }
 
   getPosts() {
-    return this.http.get<{posts: Post[]}>(`${this.baseApiEndpoint}/feed`, httpHeaders)
+    return this.http.get<{posts: Post[]}>(`${this.baseApiEndpoint}/feed`)
               .pipe(tap((feed) => {
                 this.postList = feed.posts;
                 this.postUpdated.next([...this.postList]);
@@ -48,7 +35,7 @@ export class PostService {
 		const formData = new FormData();
 		formData.append('content', newPost.content);
     formData.append('image', image);
-		return this.http.post<Post>(`${this.baseApiEndpoint}/new/post`, formData, httpHeadersUpload)
+		return this.http.post<Post>(`${this.baseApiEndpoint}/new/post`, formData)
             .pipe(tap(( newPostdata ) => {
               if ( newPostdata ) {
                 const newPostFront = {
@@ -65,7 +52,7 @@ export class PostService {
   }
 
   deletePost ( post: Post ) {
-    return this.http.delete(`${this.baseApiEndpoint}/post/remove/${post._id}`, httpHeaders)
+    return this.http.delete(`${this.baseApiEndpoint}/post/remove/${post._id}`)
             .pipe(tap(() => {
               this.flashService.show('Your post is deleted...', { cssClass: 'alert-success', timeout: 5000 });
             }),
@@ -77,8 +64,8 @@ export class PostService {
     return this.postUpdated.asObservable();
   }
 
-  likePost (post: Post) {
-    return this.http.post(`${this.baseApiEndpoint}/like/${post._id}`, httpHeaders)
+  likePost ( post: Post ) {
+    return this.http.post(`${this.baseApiEndpoint}/post/like/${post._id}`, null)
               .pipe(tap((like) => {
                 console.log(like);
               }),

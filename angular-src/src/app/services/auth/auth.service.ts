@@ -8,10 +8,6 @@ import { FlashMessagesService   } from 'angular2-flash-messages';
 
 import { User } from './../../classes/users';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +21,7 @@ export class AuthService {
 
   /*** Add a new user */
   registerUser (user: User) {
-    return this.http.post<User>(`${this.baseApiEndpoint}/signup`, user, httpOptions)
+    return this.http.post<User>(`${this.baseApiEndpoint}/signup`, user)
                     .pipe(tap((newUser) => console.log(newUser)),
                     catchError(this.handleError<User>('Register User'))
     );
@@ -33,7 +29,7 @@ export class AuthService {
 
   /** Log User */
   logUser (userData) {
-    return this.http.post(`${this.baseApiEndpoint}/login`, userData, httpOptions)
+    return this.http.post(`${this.baseApiEndpoint}/login`, userData)
                     .pipe(tap((data) => console.log(data)),
                     catchError(this.handleError<any>('Login User'))
     );
@@ -62,13 +58,7 @@ export class AuthService {
 
   /** Profile */
   getUserProfile () {
-    const httpHeaders = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'x-auth': localStorage.getItem('token')
-      })
-    }
-    return this.http.get(`${this.baseApiEndpoint}/profile`, httpHeaders)
+    return this.http.get(`${this.baseApiEndpoint}/profile`)
                     .pipe(tap((data) => console.log(data)),
                     catchError(this.handleError<any>('User Profile'))
     );
@@ -76,6 +66,9 @@ export class AuthService {
 
   /** Get User */
   getUserConnected() { return JSON.parse(localStorage.getItem('user')); }
+
+  /** Get Token */
+  getUserToken () { return localStorage.getItem('token'); }
 
   /**
    * Handle Http operation that failed.

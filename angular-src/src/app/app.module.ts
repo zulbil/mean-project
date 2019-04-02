@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { PostsComponent } from './posts/posts.component';
@@ -15,6 +15,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ValidateService } from './services/validate/validate.service';
 import { FlashMessagesModule  } from 'angular2-flash-messages';
 import { AuthService } from './services/auth/auth.service';
+import { AuthInterceptor } from './services/auth/auth-interceptor';
 import { AuthGuardService } from './services/guard/authguard.service';
 
 
@@ -38,7 +39,12 @@ import { AuthGuardService } from './services/guard/authguard.service';
   providers: [
     ValidateService,
     AuthService,
-    AuthGuardService
+    AuthGuardService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
