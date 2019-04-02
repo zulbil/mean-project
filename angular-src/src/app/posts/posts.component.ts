@@ -27,7 +27,6 @@ export class PostsComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.auth.getUserConnected();
-    console.log(this.user);
     this.getPostsList();
     this.formControl();
   }
