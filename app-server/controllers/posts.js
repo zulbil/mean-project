@@ -72,7 +72,7 @@ var postDelete = function(req, res ) {
         return res.status(404).send({'response': 'ID is invalid'}); 
     }
 
-    Post.findOneAndRemove(
+    Post.findOneAndDelete(
         {
             "_id": id, 
             "_creator": req.user._id
@@ -134,6 +134,7 @@ var likePost = function (req, res) {
                 throw err;
             } else {
                 post.likesObj.push(like); 
+                post.likes = 1; 
                 post.save((err, postUpdated) => {
                     if (err) {
                         throw err;

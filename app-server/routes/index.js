@@ -19,7 +19,7 @@ router.get('/feed', authenticate, postCtrl.feedList );
 router.get('/post/:id', authenticate,postCtrl.postById); 
 router.delete('/post/remove/:id', authenticate, postCtrl.postDelete ); 
 router.patch('/post/edit/:id', authenticate, postCtrl.postUpdate ); 
-router.post('/like/:id', authenticate, postCtrl.likePost );
+router.post('/post/like/:id', authenticate, postCtrl.likePost );
 
 
 router.get('/', (req, res) => {
