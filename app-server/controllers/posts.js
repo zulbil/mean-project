@@ -134,7 +134,7 @@ var likePost = function (req, res) {
                 throw err;
             } else {
                 post.likesObj.push(like); 
-                post.likes = 1; 
+                post.likes ++; 
                 post.save((err, postUpdated) => {
                     if (err) {
                         throw err;
