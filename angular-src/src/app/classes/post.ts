@@ -3,6 +3,7 @@ export class Post {
     created: string;
     updatedAt: string;
     likes: number;
+    likesObj: any;
     dislikes: number;
     content: string;
     media: string;

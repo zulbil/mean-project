@@ -36,8 +36,34 @@ var postListHistory = function(req, res ) {
 }
 
 var feedList = function (req, res) {
-    Post.find().sort({ created: -1 }).populate('_creator').then((posts) => {
+    Post.find()
+        .sort({ created: -1 })
+        .populate('_creator')
+        .populate('likesObj')
+        .then((posts) => {
         if(!posts) return res.status(404).send({'response': 'Not found'}); 
+        var allPosts = []; 
+        var userId   = req.user._id; 
+        console.log('User Id: ', userId);
+        var singlePost; 
+        posts.forEach(post => {
+            if ( post.likesObj.length ) {
+                post.likesObj.forEach( like =>  {
+                    console.log(like._creator);
+                    console.log('User Id: ', userId);
+                    console.log(( like._creator == userId ));
+                    if ( like._creator === userId ) {
+                        
+                        singlePost = {
+                            ... post,
+                            activelike: true
+                        }; 
+                    }
+                })
+            } 
+            allPosts[singlePost]; 
+        });
+        console.log(allPosts); 
         res.status(200).send({posts});
     }, (err) => {
         res.status(400).send(err);
@@ -134,7 +160,7 @@ var likePost = function (req, res) {
                 throw err;
             } else {
                 post.likesObj.push(like); 
-                post.likes = 1; 
+                post.likes ++;  
                 post.save((err, postUpdated) => {
                     if (err) {
                         throw err;
