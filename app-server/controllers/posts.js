@@ -36,12 +36,34 @@ var postListHistory = function(req, res ) {
 }
 
 var feedList = function (req, res) {
-    Post.find().sort({ created: -1 }).populate('_creator').then((posts) => {
-        if(!posts) return res.status(404).send({'response': 'Not found'}); 
-        res.status(200).send({posts});
-    }, (err) => {
-        res.status(400).send(err);
-    }); 
+    Post.find()
+        .sort({ created: -1 })
+        .populate('_creator')
+        .populate('likesObj')
+        .then((posts) => {
+            if(!posts) return res.status(404).send({'response': 'Not found'}); 
+            var allPosts = [];
+            var singlePost;  
+            posts.forEach(element => {
+                var isLiked = false;
+                if (element.likesObj.length) { 
+                    element.likesObj.forEach((like) => {
+                        if (JSON.stringify(like._creator) === JSON.stringify(req.user._id)) {
+                            isLiked = true; 
+                        }
+                    }) 
+                }
+                singlePost = {
+                    ...element._doc, 
+                    isLiked: isLiked
+                };
+                allPosts.push(singlePost); 
+            });
+            //console.log(allPosts[0]); 
+            res.status(200).send({ posts: allPosts });
+        }, (err) => {
+            res.status(400).send(err);
+        }); 
 }
 
 var postById = function(req, res ) {
