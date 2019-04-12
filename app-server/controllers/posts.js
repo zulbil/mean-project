@@ -43,6 +43,7 @@ var feedList = function (req, res) {
         .then((posts) => {
             if(!posts) return res.status(404).send({'response': 'Not found'}); 
             var allPosts = [];
+            var userLikesId = [];
             var singlePost;  
             posts.forEach(element => {
                 var isLiked = false;
@@ -51,15 +52,17 @@ var feedList = function (req, res) {
                         if (JSON.stringify(like._creator) === JSON.stringify(req.user._id)) {
                             isLiked = true; 
                         }
+                        userLikesId.push(like._creator); 
                     }) 
                 }
                 singlePost = {
                     ...element._doc, 
-                    isLiked: isLiked
+                    isLiked: isLiked,
+                    userLikesId : userLikesId
                 };
                 allPosts.push(singlePost); 
             });
-            //console.log(allPosts[0]); 
+            console.log(allPosts); 
             res.status(200).send({ posts: allPosts });
         }, (err) => {
             res.status(400).send(err);
