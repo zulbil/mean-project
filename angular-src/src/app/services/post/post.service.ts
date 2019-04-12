@@ -72,6 +72,15 @@ export class PostService {
               catchError(this.handleError<any>('Liking post'))
     );
   }
+
+  dislikePost ( post: Post ) {
+    return this.http.post(`${this.baseApiEndpoint}/post/dislike/${post._id}`, null)
+              .pipe(tap((like) => {
+                console.log(like);
+              }),
+              catchError(this.handleError<any>('Liking post'))
+    );
+  }
    /**
    * Handle Http operation that failed.
    * Let the app continue.

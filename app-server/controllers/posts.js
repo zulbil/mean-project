@@ -41,33 +41,29 @@ var feedList = function (req, res) {
         .populate('_creator')
         .populate('likesObj')
         .then((posts) => {
-        if(!posts) return res.status(404).send({'response': 'Not found'}); 
-        var allPosts = []; 
-        var userId   = req.user._id; 
-        console.log('User Id: ', userId);
-        var singlePost; 
-        posts.forEach(post => {
-            if ( post.likesObj.length ) {
-                post.likesObj.forEach( like =>  {
-                    console.log(like._creator);
-                    console.log('User Id: ', userId);
-                    console.log(( like._creator == userId ));
-                    if ( like._creator === userId ) {
-                        
-                        singlePost = {
-                            ... post,
-                            activelike: true
-                        }; 
-                    }
-                })
-            } 
-            allPosts[singlePost]; 
-        });
-        console.log(allPosts); 
-        res.status(200).send({posts});
-    }, (err) => {
-        res.status(400).send(err);
-    }); 
+            if(!posts) return res.status(404).send({'response': 'Not found'}); 
+            var allPosts = [];
+            var singlePost;  
+            posts.forEach(element => {
+                var isLiked = false;
+                if (element.likesObj.length) { 
+                    element.likesObj.forEach((like) => {
+                        if (JSON.stringify(like._creator) === JSON.stringify(req.user._id)) {
+                            isLiked = true; 
+                        }
+                    }) 
+                }
+                singlePost = {
+                    ...element._doc, 
+                    isLiked: isLiked
+                };
+                allPosts.push(singlePost); 
+            });
+            //console.log(allPosts[0]); 
+            res.status(200).send({ posts: allPosts });
+        }, (err) => {
+            res.status(400).send(err);
+        }); 
 }
 
 var postById = function(req, res ) {
@@ -160,7 +156,7 @@ var likePost = function (req, res) {
                 throw err;
             } else {
                 post.likesObj.push(like); 
-                post.likes ++;  
+                post.likes ++; 
                 post.save((err, postUpdated) => {
                     if (err) {
                         throw err;

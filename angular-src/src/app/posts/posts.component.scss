@@ -184,9 +184,10 @@ figure {
   top: -10px;
 }
 .we-video-info > ul li span.like {
-  color: green;
+  color: #0a3d62;
   cursor: pointer;
   transition: all 0.2s linear 0s;
+  i { font-size: 18px; }
 }
 .we-video-info > ul li span.dislike {
   color: red;

@@ -19,6 +19,7 @@ export class PostsComponent implements OnInit {
   user;
   imagePreview;
   mode = 'create';
+  clickLike = false; 
 
   constructor(
     private postService: PostService,
@@ -41,13 +42,25 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  like(post: Post) {
-    post.likes++;
-    this.postService.likePost(post).subscribe((data) => {
-      console.log(data);
-    }, (error) => {
-      console.log(error);
-    });
+  like(post) {
+    this.clickLike = ( this.clickLike ) ? false : true ;
+
+    if (!post.isLiked) {
+      post.likes++;
+      this.postService.likePost(post).subscribe((data) => {
+        console.log(data);
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      post.likes--;
+      this.postService.dislikePost(post).subscribe((data) => {
+        console.log(data);
+      }, (error) => {
+        console.log(error);
+      });
+    }
+    this.getPostsList();
   }
 
   dislike (post: Post) {
