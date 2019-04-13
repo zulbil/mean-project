@@ -62,7 +62,7 @@ var feedList = function (req, res) {
                 };
                 allPosts.push(singlePost); 
             });
-            console.log(allPosts); 
+            //console.log(allPosts); 
             res.status(200).send({ posts: allPosts });
         }, (err) => {
             res.status(400).send(err);
@@ -75,7 +75,6 @@ var postById = function(req, res ) {
     if(!ObjectID.isValid(id)) {
         return res.status(400).send({'response': 'ID is invalid'}); 
     }
-
     Post.findOne({
         "_id": id, 
         "_creator": req.user._id
@@ -147,7 +146,8 @@ var likePost = function (req, res) {
     var id = req.params.id; 
 
     var newLike = new Like({
-        _creator : req.user._id
+        _creator : req.user._id,
+        post: id
     }); 
 
     newLike.save( (err, like) => {
@@ -172,6 +172,32 @@ var likePost = function (req, res) {
     }); 
 }
 
+var dislikePost = function (req, res) {
+    var id = req.params.id; 
+    var userId = req.user._id; 
+    var idLike;
+
+    Like.findOne({'_creator': userId, 'post': id }).then((like) => {
+        like.remove(); 
+        idLike = like._id; 
+        return Post.findById(id);
+    }).then((post) => {
+        if ( !post.likesObj.length ) {
+            return Promise.reject(); 
+        }
+        var likePost = post.likesObj.filter((item) => JSON.stringify(item) !== JSON.stringify(idLike)); 
+        post.likesObj = likePost;
+        post.likes--;
+        return post.save();
+    }).then((newPost) => {
+        console.log(newPost);
+        res.status(200).send(newPost);
+    }).catch((error) => {
+        res.status(400).send(error); 
+    })
+}
+
+
 module.exports = {
     postCreate,
     postListHistory,
@@ -179,5 +205,6 @@ module.exports = {
     postById,
     postDelete,
     postUpdate,
-    likePost
+    likePost,
+    dislikePost
 }

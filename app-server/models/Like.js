@@ -7,6 +7,10 @@ var LikeSchema  = new mongoose.Schema({
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
+    }, 
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
     }
 }); 
 

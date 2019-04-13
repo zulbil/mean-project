@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Post } from '../classes/post';
 import { PostService } from '../services/post/post.service';
 import { AuthService } from './../services/auth/auth.service';
@@ -20,6 +20,7 @@ export class PostsComponent implements OnInit {
   imagePreview;
   mode = 'create';
   clickLike = false; 
+  @ViewChild('likeP') likeP: ElementRef; 
 
   constructor(
     private postService: PostService,
@@ -44,7 +45,6 @@ export class PostsComponent implements OnInit {
 
   like(post) {
     this.clickLike = ( this.clickLike ) ? false : true ;
-
     if (!post.isLiked) {
       post.likes++;
       this.postService.likePost(post).subscribe((data) => {
@@ -60,7 +60,6 @@ export class PostsComponent implements OnInit {
         console.log(error);
       });
     }
-    this.getPostsList();
   }
 
   dislike (post: Post) {

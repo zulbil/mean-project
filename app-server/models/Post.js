@@ -19,7 +19,6 @@ var PostSchema  = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Like'
     }],
-    dislikes : { type: Number, default: 0 },
     media: { type: String, default: null },
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
