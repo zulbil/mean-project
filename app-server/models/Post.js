@@ -23,7 +23,11 @@ var PostSchema  = new mongoose.Schema({
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
-    }
+    }, 
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 }); 
 
 var Post = mongoose.model('Post', PostSchema); 

@@ -1,4 +1,6 @@
 const fs            = require('fs');
+const _             = require('lodash');
+
 var {Post}          = require('./../models/Post'); 
 var {Like}          = require('./../models/Like');
 var {ObjectID}      = require('mongodb');
