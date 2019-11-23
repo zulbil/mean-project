@@ -1,5 +1,5 @@
-const mongoose = require('mongoose'); 
-var PostSchema  = new mongoose.Schema({
+const mongoose      = require('mongoose'); 
+const PostSchema    = new mongoose.Schema({
     content: { 
         type: String,
         required: true,
@@ -19,7 +19,8 @@ var PostSchema  = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Like'
     }],
-    media: { type: String, default: null },
+    image: { type: String, default: null },
+    video: { type: String, default:null },
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
@@ -30,6 +31,6 @@ var PostSchema  = new mongoose.Schema({
     }]
 }); 
 
-var Post = mongoose.model('Post', PostSchema); 
+const Post = mongoose.model('Post', PostSchema); 
 
 module.exports = { Post }; 

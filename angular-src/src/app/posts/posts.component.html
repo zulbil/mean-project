@@ -1,116 +1,283 @@
 <app-navbar></app-navbar>
-<div class="container main-content">
+<div class="container-fluid main-content">
   <div class="row">
-    <div class="col-12 col-md-8">
-      <div class="central-meta">
-        <div class="new-postbox">
-      <figure>
-        <img class="circle-img" src="../../assets/images/user.jpg" alt="User">
-      </figure>
-      <div class="newpst-input">
+    <div class="col-12 col-md-2">
+        <app-sidebar-left></app-sidebar-left>  
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="card form-post">
         <form method="post" [formGroup]="postForm" (ngSubmit)="postStatus()" enctype="multipart/form-data">
-          <textarea
-            name="body"
-            rows="2"
-            placeholder="write something"
-            formControlName="content"
-            required>
-          </textarea>
-          <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' && postForm.get('image').value ">
-              <img [src]="imagePreview" alt="postForm.value.content">
+          <div class="card-header header-action">
+            <div class="container">
+              <div class="row">
+                <div class="post-submit-btn col-sm">
+                  <i class="fa fa-edit"></i> Make a post
+                </div>
+                <div class="post-submit-btn col-sm">
+                  <button class="btn-transparent" type="button" (click)="photoInput.click()">
+                      <i class="fa fa-photo"></i> Photo Video Album
+                  </button>
+                  <label class="fileContainer">
+                    <input id="image" type="file" (change)="onImageUpload($event)" name="image" #photoInput>
+                  </label>
+                </div>
+                <div class="post-submit-btn col-sm">
+                  <button class="btn-transparent" type="button" (click)="videoInput.click()">
+                    <i class="fa fa-video-camera"></i> Live Video
+                  </button>
+                  <label class="fileContainer">
+                      <input id="video" type="file" (change)="onVideoUpload($event)" name="video" #videoInput>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
           </div>
-          <div class="attachments">
-            <ul>
-              <li>
-                <i class="fa fa-music"></i>
-                <label class="fileContainer">
-                  <input type="file" (change)="onMusicUpload($event)" name="music">
-                </label>
-              </li>
-              <li>
-                <i class="fa fa-image"></i>
-                <label class="fileContainer">
-                  <input type="file" (change)="onImageUpload($event)" name="image">
-                </label>
-              </li>
-              <li>
-                <i class="fa fa-video-camera"></i>
-                <label class="fileContainer">
-                  <input type="file" (change)="onVideoUpload($event)" name="video">
-                </label>
-              </li>
-              <li>
-                <i class="fa fa-camera"></i>
-                <label class="fileContainer">
-                  <input type="file" (change)="onFileUpload($event)" name="file">
-                </label>
-              </li>
-              <li>
-                <button type="submit" class="btn btn-outline-primary">Post</button>
-              </li>
-            </ul>
+          <div class="card-body">
+              <textarea
+                class="full-width"
+                name="body"
+                rows="2"
+                placeholder="Where are you ? What are you doing ?"
+                formControlName="content"
+                required>
+              </textarea>
+              <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' && postForm.get('image').value ">
+                  <img [src]="imagePreview" alt="postForm.value.content">
+              </div>
+              <div class="video-preview" *ngIf="videoPreview && videoPreview !== '' && postForm.get('video').value ">
+                  <video width="320" height="240">
+                    <source [src]="videoPreview">
+                  </video> 
+              </div>
+              <button class="btn btn-base btn-lg"type="submit">Post</button>
           </div>
         </form>
       </div>
-        </div>
-      </div>
-      <div class="load-more" *ngIf="posts.length > 0">
-        <div class="central-meta item" style="display: inline-block;" *ngFor="let post of posts">
-            <div class="user-post">
-              <div class="friend-info">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="row">
-                      <figure class="col-12 col-sm-2">
+      <div class="load-more" *ngIf="posts.length > 0"> 
+          <div class="card mt-4 post-{{post._id}}" *ngFor="let post of posts">
+              <div class="header-card">
+                <div class="container">
+                  <div class="row pt-4">
+                    <div class="header-card-left col">
+                      <figure>
                         <div class="circle-img" style="background-image: url('../../assets/images/user.jpg');"></div>
                       </figure>
-                      <div class="friend-name col-12 col-sm-8">
-                        <a class="username" routerLink="/profile">{{ post._creator.username }}</a>
-                        <span>published: {{ post.created | date:'medium' }}</span>
+                      <div class="name-author">
+                        <p class="author">
+                          <a routerLink="/profile">
+                            {{ post._creator.username }}
+                          </a>
+                        </p>
+                        <p class="date">{{ post.created | date:'fullDate' }}</p>
                       </div>
-                      <div class="more dropdown col-12 col-sm-2" *ngIf="user.username == post._creator.username">
-                        <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          More
+                    </div>
+                    <div class="more dropdown col" *ngIf="user._id == post._creator._id">
+                      <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="editPost(post)">
+                          <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="javascript:void(0);" (click)="editPost(post)">
-                            <i class="fa fa-pencil" aria-hidden="true"></i> Edit
-                          </a>
-                          <a class="dropdown-item" href="javascript:void(0);" (click)="removePost(post)">
-                            <i class="fa fa-trash" aria-hidden="true"></i> Remove
-                          </a>
-                        </div>
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="removePost(post)">
+                          <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                        </a>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="post-meta">
-                  <div class="description">
-                    {{ post.content }}
-                  </div>
-                  <div class="media-container" *ngIf="post.media">
-                    <img src="{{ post.media }}" alt="Post image">
-                  </div>
-                  <div class="we-video-info">
-                    <ul>
-                      <li>
-                        <span class="like" data-toggle="tooltip" data-placement="top" title="like" (click)="like(post)">
-                          <i *ngIf="post.userLikesId && post.userLikesId.indexOf(user._id) == -1" class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                          <i *ngIf="post.userLikesId && post.userLikesId.indexOf(user._id) != -1" class="fa fa-thumbs-up" aria-hidden="true"></i>
-                          <!-- <i class="fa" [ngClass]="{'fa-thumbs-up': post.userLikesId.indexOf(user._id) != -1, 'fa-thumbs-o-up': post.userLikesId.indexOf(user._id) == -1}" aria-hidden="true" #likeP></i> -->
-                          <ins>{{ post.likes }}</ins>
-                        </span>
-                      </li>
-                    </ul>
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ post.content }}</p>
+                <img src="{{ post.image }}" class="img-fluid" alt="Responsive image" *ngIf="post.image">
+                <video 
+                    class="video-responsive"
+                    width="320" 
+                    height="240" 
+                    controls 
+                    preload="auto" 
+                    codecs="avc1.42E01E, mp4a.40.2"
+                    *ngIf="post.video"
+                >
+                  <source src="{{ post.video }}" type="video/mp4">
+                </video> 
+              </div>
+              <div class="reaction-number" *ngIf="post.likes > 0 || post.comments.length > 0">
+                <div *ngIf="post.likes > 0"> 
+                  <i 
+                    [ngClass]="{ 'fa-thumbs-up': post.isLiked , 'fa-thumbs-o-up' : !post.isLiked }"
+                    class="fa" 
+                    aria-hidden="true"></i> {{post.likes}} 
+                </div>
+                <div *ngIf="post.comments.length > 0"> {{ post.comments.length }} comments</div>
+              </div>
+              <div class="action-post">
+                <div (click)="like(post)" class="like-action">
+                  <i
+                    [ngClass]="{ 'fa-thumbs-up': post.isLiked , 'fa-thumbs-o-up' : !post.isLiked }"
+                    class="fa" 
+                    aria-hidden="true"></i>  Like
+                </div>
+                <div (click)="showCommentPost(post, commentPost)">
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>  Comment
+                </div>
+                <div>
+                    <i class="fa fa-share-square-o" aria-hidden="true"></i>  Share
+                </div>
+              </div>
+              <div class="hidden cp-{{post._id}}" #commentPost>
+                <div class="comment-post">
+                    <form method="post" [formGroup]="commentForm">
+                      <figure>
+                        <div class="circle-img" style="background-image: url('../../assets/images/user.jpg');"></div>
+                      </figure>
+                      <textarea
+                        name="body"
+                        rows="1"
+                        placeholder="write a comment..."
+                        formControlName="content"
+                        (keydown.enter)="onKeyDown($event, post)"
+                        required>
+                      </textarea>
+                      <button class="hidden" type="submit">Comment</button>
+                    </form>
+                </div>
+                <div class="comments-section" >
+                  <div class="single-comment" *ngFor="let comment of post.comments">
+                    <div class="item-comment item-comment-{{comment._id}}">
+                      <figure class="mr-3">
+                        <div class="circle-img" style="background-image: url('../../assets/images/user.jpg');"></div>
+                      </figure>
+                      <div class="comment-content">
+                        <p class="comment-author"><strong>Ghost Zulbil</strong></p>
+                        <p>{{ comment.content }}</p>
+                        <div class="more dropdown col" *ngIf="user._id == comment._creator">
+                          <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="javascript:void(0);" (click)="updateComment(post, comment, $event)">
+                              <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);" (click)="removeComment(post, comment)">
+                              <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="hidden edit-form comment-{{comment._id}}">
+                      <form method="post" [formGroup]="editCommentForm">
+                        <figure>
+                          <div class="circle-img" style="background-image: url('../../assets/images/user.jpg');"></div>
+                        </figure>
+                        <textarea
+                          name="body"
+                          rows="2"
+                          placeholder="write a comment..."
+                          formControlName="content"
+                          (keydown.enter)="editComment($event, comment, post)"
+                          (keydown)="escapecancelComment($event, comment)"
+                          required>
+                        </textarea>
+                      </form>
+                      <p class="text-right pr-4 h6">
+                        Press Escape to <a class="text-danger" href="javascript:void(0);" (click)="cancelComment(comment)">cancel</a>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+      </div>
+      <div class="load-more no-posts mt-4" *ngIf="posts && posts.length <= 0">
+        <div class="spinner-grow text-base" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        <div class="spinner-grow text-base" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-base" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-base" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+      </div>
+      <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  <form class="form-post" method="post" [formGroup]="editPostForm" (ngSubmit)="postStatus()" enctype="multipart/form-data">
+                    <div class="card-header header-action">
+                      <div class="container">
+                        <div class="row">
+                          <div class="post-submit-btn col-sm">
+                            <i class="fa fa-edit"></i> Make a post
+                          </div>
+                          <div class="post-submit-btn col-sm">
+                            <button 
+                            class="btn-transparent"
+                            [ngClass]="{ 'no-pointer':  imagePreview && imagePreview !== '' && editPostForm.get('image').value }" 
+                            type="button" 
+                            (click)="photoInput.click()"
+                            >
+                                <i class="fa fa-photo"></i> Photo Video Album
+                            </button>
+                            <label class="fileContainer">
+                              <input id="image" type="file" (change)="onEditImageUpload($event)" name="image" #photoInput>
+                            </label>
+                          </div>
+                          <div class="post-submit-btn col-sm">
+                            <button 
+                              class="btn-transparent" 
+                              [ngClass]="{ 'no-pointer': videoPreview && videoPreview !== '' && editPostForm.get('video').value }"
+                              type="button" 
+                              (click)="videoInput.click()"
+                            >
+                              <i class="fa fa-video-camera"></i> Live Video
+                            </button>
+                            <label class="fileContainer">
+                                <input id="video" type="file" (change)="onEditVideoUpload($event)" name="video" #videoInput>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="card-body">
+                        <textarea
+                          class="full-width"
+                          name="body"
+                          rows="2"
+                          placeholder="Where are you ? What are you doing ?"
+                          formControlName="content"
+                          required>
+                        </textarea>
+                        <div class="image-preview" *ngIf="imagePreview && imagePreview !== '' && editPostForm.get('image').value ">
+                            <img [src]="imagePreview" alt="editPostForm.value.content">
+                        </div>
+                        <div class="video-preview" *ngIf="videoPreview && videoPreview !== '' && editPostForm.get('video').value ">
+                            <video class="video-responsive" width="320" height="240">
+                              <source [src]="videoPreview">
+                            </video> 
+                        </div>
+                        <button class="btn btn-base btn-lg" type="submit" data-dismiss="modal">Post</button>
+                        <button 
+                          *ngIf="mode == 'edit'" 
+                          class="btn btn-light btn-lg ml-4"
+                          (click)="cancelEditPost()"
+                        >Cancel</button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="load-more no-posts" *ngIf="posts && posts.length <= 0">
-        <h4>No posts Added!</h4>
-      </div>
     </div>
     <div class="col-lg-4">
         <flash-messages></flash-messages>

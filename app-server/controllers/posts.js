@@ -3,19 +3,22 @@ const _             = require('lodash');
 
 var {Post}          = require('./../models/Post'); 
 var {Like}          = require('./../models/Like');
+var {Comment}       = require('./../models/Comment'); 
 var {ObjectID}      = require('mongodb');
 var {upload}        = require('./../middlewares/upload');
 
 var postCreate = function(req, res) {
     const url       = req.protocol+ '://'+req.get('host'); 
-    var imagePath = null;  
-    if ( req.file ) {
-        imagePath = url+'/images/'+req.file.filename; 
-    }
-    var newPost = new Post({
+    let imagePath   = null;  
+    let videoPath   = null;
+    
+    imagePath = (req.files && req.files['image']) && url+'/images/'+req.files['image'][0].filename;
+    videoPath = (req.files && req.files['video']) && url+'/videos/'+req.files['video'][0].filename; 
+    const newPost = new Post({
         content: req.body.content,
         created: new Date().getTime(),
-        media  : imagePath, 
+        image  : imagePath, 
+        video : videoPath,
         _creator: req.user._id
     }); 
     newPost.save().then((doc) => {
@@ -42,6 +45,7 @@ var feedList = function (req, res) {
         .sort({ created: -1 })
         .populate('_creator')
         .populate('likesObj')
+        .populate('comments')
         .then((posts) => {
             if(!posts) return res.status(404).send({'response': 'Not found'}); 
             var allPosts = [];
@@ -104,18 +108,30 @@ var postDelete = function(req, res ) {
             "_creator": req.user._id
         }
     ).then((post) => {
-        if(!post) {
-            res.status(404).send({'response': 'Post not found'});
-        } else {
-            var fileName = post.media.split('/').pop();
-            fs.unlink(`./public/uploads/images/${fileName}`, (err) => {
-                if (err) throw err;
-                console.log('Successfully remove from /public/uploads/images');
-            })
-            res.status(204).send({'response': 'Post was successfully removed'});
+        // Remove image or video File
+        let path; 
+        let fileName;
+        if (post.image) {
+            fileName = post.image.split('/').pop();
+            path = `./public/uploads/images/${fileName}`;
         }
-    }, (err) => {
-        res.status(400).send(err); 
+        if (post.video) {
+            fileName = post.video.split('/').pop();
+            path = `./public/uploads/videos/${fileName}`;
+        }
+        if (post.image || post.video) {
+            fs.unlink(path, (err) => {
+                if (err) throw err;
+                console.log('Successfully remove');
+            })
+        }
+        return Comment.findOneAndRemove({"post": id }); 
+    }).then(()=> {
+        return Like.findOneAndRemove({"post": id }); 
+    }).then(() => {
+        res.status(204).send({'response': 'Post was successfully removed'});
+    }).catch((error) => {
+        res.status(400).send(error); 
     })
 }
 

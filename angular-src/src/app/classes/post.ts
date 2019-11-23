@@ -1,11 +1,15 @@
+import { Comment } from './comment';
 export class Post {
-    _id: number;
+    _id: string;
     created: string;
     updatedAt: string;
     likes: number;
     likesObj: any;
     dislikes: number;
+    isLiked: boolean;
     content: string;
-    media: string;
+    image: string;
+    video: string;
     _creator: any;
+    comments: Comment[]
 }

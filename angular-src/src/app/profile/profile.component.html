@@ -1,6 +1,15 @@
 <app-navbar></app-navbar>
-<div>
-  <p>Lastname: {{ user.lastname }}</p>
-  <p>Firstname: {{ user.firstname }}</p>
-  <p>Email: {{ user.email }}</p>
+<div class="container-fluid main-content">
+  <div class="row">
+    <div class="col-12 col-md-2">
+        <app-sidebar-left></app-sidebar-left>  
+    </div>
+    <div class="col-12 col-md-6">
+      <div>
+        <p>Lastname: {{ user.lastname }}</p>
+        <p>Firstname: {{ user.firstname }}</p>
+        <p>Email: {{ user.email }}</p>
+      </div>
+    </div>
+  </div>
 </div>

@@ -17,6 +17,7 @@ import { FlashMessagesModule  } from 'angular2-flash-messages';
 import { AuthService } from './services/auth/auth.service';
 import { AuthInterceptor } from './services/auth/auth-interceptor';
 import { AuthGuardService } from './services/guard/authguard.service';
+import { SidebarLeftComponent } from './sidebar-left/sidebar-left.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { AuthGuardService } from './services/guard/authguard.service';
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    SidebarLeftComponent
   ],
   imports: [
     BrowserModule,

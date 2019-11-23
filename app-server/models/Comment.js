@@ -4,6 +4,10 @@ var CommentSchema  = new mongoose.Schema({
         type: Date,
         default: Date.now 
     },
+    updatedAt: {
+        type: Date, 
+        default: Date.now
+    },
     _creator: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'

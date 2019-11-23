@@ -10,13 +10,14 @@ var {ObjectID}      = require('mongodb');
 // };
   
 
-var createComment = function (req, res ) {
-    var id      = req.params.id; 
-    var userId  = req.user._id; 
-    var content = req.body.content; 
-    var com; 
+const createComment = function (req, res ) {
+    const id      = req.params.id;  // Post Id
+    const userId  = req.user._id; 
+    const content = req.body.content; 
+    let com; 
 
-    var newComment = Comment({
+   
+    const newComment = Comment({
         _creator: userId, 
         post: id, 
         content: content
@@ -26,28 +27,32 @@ var createComment = function (req, res ) {
         com = comment; 
         return Post.findById(id);
     }).then((post)=> {
-        post.comments.push(com);
+        post.comments.unshift(com);
+        return post.save();
+    }).then(() => {
         res.status(201).send(com); 
     }).catch((error) => {
         res.status(400).send(error); 
     })
 }
 
-var updateComment = function (req, res ) {
-    var id = req.params.id; 
+const updateComment = function (req, res ) {
+    const id = req.params.id; 
     //in our body we will take only title and content property
-    var body = req.body.content
+    const body = _.pick(req.body, ['content']); 
 
     if(!ObjectID.isValid(id)) {
         return res.status(404).send({'response': 'ID is invalid'}); 
     }
 
     body.updatedAt = new Date().getTime(); 
+
     //update query
-    var query = {
+    const query = {
         "_id": id, 
         "_creator": req.user._id
     }; 
+
     Comment.findOneAndUpdate(query, {$set: body}, {new: true}).then((comment) => {
         if(!comment) {
             return res.status(404).send('comment not found');
@@ -58,21 +63,24 @@ var updateComment = function (req, res ) {
     })
 }
 
-var removeComment = function (req, res) {
-    var id = req.params.id; 
-    var idCom = req.params.idCom; 
+const removeComment = function (req, res) {
+    const id = req.params.id; 
+    const idCom = req.params.idCom; 
 
     Post.findById(id).then((post) => {
         post.comments.filter((comment) => { 
-            return JSON.stringify(comment) !== JSON.stringify(idCom)
+            return JSON.stringify(comment._id) !== JSON.stringify(idCom)
         }); 
-        return Comment.findById(idCom);
+        return post.save(); 
+    }).then(() => {
+        return Comment.findByIdAndRemove(idCom);
     }).then((comment) => {
-        comment.remove();
+        res.status(204).send(null); 
     }).catch((err) => {
         res.status(400).send(err);
     })
 }
+
 
 module.exports = {
     createComment,

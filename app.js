@@ -21,7 +21,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Body Parser Middleware
 app.use(bodyParser.json()); 
 
+//Routes to access images
 app.use('/images', express.static(path.join(__dirname, 'public/uploads/images'))); 
+
+//Routes to access videos
+app.use('/videos', express.static(path.join(__dirname, 'public/uploads/videos'))); 
 
 //Routes 
 app.use('/', routes);

@@ -45,8 +45,8 @@ var UserSchema      = new mongoose.Schema({
 //Here, we are overriding the response when we save a user
 // For security reason, the client just need to have back a user id and email
 UserSchema.methods.toJSON = function () {
-    var user        = this; 
-    var userObject  = user.toObject();
+    const user        = this; 
+    const userObject  = user.toObject();
 
     return _.pick(userObject, ['_id','firstname','lastname','username','email']); 
 }
@@ -64,9 +64,9 @@ UserSchema.methods.toJSON = function () {
 
 // We are not using arrow function because arrow function cannot bind this keyword
 UserSchema.methods.generateAuthToken = function () {
-    var user    = this; 
-    var access  = 'auth'; 
-    var token   = jwt.sign({_id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString(); 
+    const user    = this; 
+    const access  = 'auth'; 
+    const token   = jwt.sign({_id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString(); 
 
     user.tokens.push({ access, token }); 
 
@@ -76,7 +76,7 @@ UserSchema.methods.generateAuthToken = function () {
 }
 
 UserSchema.methods.removeToken = function (token) {
-    var user = this;
+    const user = this;
 
     return user.update({
         $pull: {
@@ -88,8 +88,8 @@ UserSchema.methods.removeToken = function (token) {
 //This function is make a query to find user with the given token
 // instance methods
 UserSchema.statics.findByToken = function (token) {
-    var User = this; 
-    var decoded; 
+    const User = this; 
+    let decoded; 
     try {
         decoded = jwt.verify(token, process.env.JWT_SECRET); 
     } catch (error) {
@@ -108,7 +108,7 @@ UserSchema.statics.findByToken = function (token) {
 
 //This function is make a query to find user with the given email 
 UserSchema.statics.findByCredentials = function (email, password) {
-    var User = this; 
+    const User = this; 
 
     return User.findOne({email}).then((user)=> {
         if(!user) {

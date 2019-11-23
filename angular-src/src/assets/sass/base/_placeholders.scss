@@ -1,0 +1,21 @@
+// Example
+
+%extra-small {
+    font-family: $roboto;
+    font-size: .75rem;
+    line-height: 1.75;
+}
+
+%small {
+    font-family: $roboto;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.83;
+}
+
+%medium {
+    font-family: $roboto;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.63;
+}

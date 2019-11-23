@@ -38,3 +38,40 @@ export const mimeType = (control: AbstractControl): Promise<{[key: string]: any 
   });
   return frObs;
 };
+
+export const mimeTypeVideo = (control: AbstractControl): Promise<{[key: string]: any }> | Observable<{[key: string]: any }> => {
+  const file        = control.value as File;
+  const fileReader  = new FileReader();
+  const frObs = Observable.create((observer: Observer<{[key: string]: any }>) => {
+    fileReader.addEventListener('loadend', () => {
+      const arr = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
+      let header = '';
+      let isValid = false;
+      for ( let i = 0; i < arr.length; i++) {
+        header += arr[i].toString(16);
+      }
+      switch ( header ) {
+        case '4f676753':
+          isValid = true;
+          break;
+        case '000001ba':
+        case '470001ba':
+        case '000001b3':
+        case '41564920':
+          isValid = true;
+          break;
+        default:
+          isValid = false; // Or you can use the blob.type as fallback
+          break;
+      }
+      if ( isValid ) {
+        observer.next(null);
+      } else {
+        observer.next({ invalidMimeType: true });
+      }
+      observer.complete();
+    });
+    fileReader.readAsArrayBuffer(file);
+  });
+  return frObs;
+};
