@@ -22,4 +22,4 @@ Go to your angular-src folder and run `ng serve`, and you will see on `htpp://lo
 
 ## Author
 
-- Joel Alexandre Khang Zulbal [joel.zulbal@satoripop.com]
+- Joel Alexandre Khang Zulbal [alexkhang25@yahoo.fr]
